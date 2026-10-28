@@ -7,96 +7,93 @@
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a1a;min-height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden;font-family:'Inter',sans-serif;color:#fff}
-.scene{width:100%;max-width:480px;padding:20px;display:flex;flex-direction:column;align-items:center;z-index:10;position:relative}
-.hint{font-size:14px;letter-spacing:2px;text-transform:uppercase;opacity:.6;margin-bottom:30px;animation:pulse 2s infinite}
+body{min-height:100vh;display:flex;justify-content:center;align-items:center;font-family:'Inter',sans-serif;color:#fff;background:linear-gradient(180deg,#050516 0%,#0a0a1a 100%);transition:background 3s;overflow:hidden}
+body.dawn{background:linear-gradient(180deg,#ff7e5f 0%,#feb47b 20%,#1a1a3a 70%,#0a0a1a 100%)}
+.scene{width:100%;max-width:480px;padding:20px;display:flex;flex-direction:column;align-items:center;z-index:20;position:relative}
+.hint{font-size:14px;letter-spacing:2px;text-transform:uppercase;opacity:.7;margin-bottom:30px;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
 .envelope{position:relative;width:320px;height:200px;cursor:pointer}
-.env-back{position:absolute;width:100%;height:100%;background:#f7e6c7;border-radius:0 0 12px 12px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-.env-flap{position:absolute;top:0;width:0;height:0;border-left:160px solid transparent;border-right:160px solid transparent;border-top:110px solid #ff8fab;transform-origin:top;transition:.8s cubic-bezier(.68,-.55,.27,1.55);z-index:3}
+.env-back{position:absolute;width:100%;height:100%;background:#f7e6c7;border-radius:0 0 12px 12px}
+.env-flap{position:absolute;top:0;width:0;height:0;border-left:160px solid transparent;border-right:160px solid transparent;border-top:110px solid #ff8fab;transform-origin:top;transition:.8s;z-index:3}
 .envelope.open .env-flap{transform:rotateX(180deg)}
 .letter{position:absolute;bottom:10px;left:12px;right:12px;height:175px;background:white;border-radius:8px;transition:.8s .4s;z-index:2;display:flex;justify-content:center;align-items:center;color:#333}
 .envelope.open .letter{transform:translateY(-140px);height:300px}
 .letter-inner{opacity:0;transition:.6s .9s;text-align:center}
 .envelope.open .letter-inner{opacity:1}
-.content{display:none;min-height:100vh;width:100%;position:relative}
-.content.show{display:block;animation:fadeIn 1s}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.content{display:none;min-height:100vh;width:100%;position:relative;overflow:auto}
+.content.show{display:block}
 .stars{position:fixed;inset:0;z-index:0}
-.c{position:relative;z-index:5;max-width:600px;margin:0 auto;padding:40px 24px;text-align:center}
-.title{font-family:'Dancing Script',cursive;font-size:48px;margin:20px 0}
+.center{position:relative;z-index:5;max-width:600px;margin:0 auto;padding:40px 24px;text-align:center}
+.title{font-family:'Dancing Script',cursive;font-size:52px;margin:20px 0}
 .card{background:rgba(255,255,255,.08);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.15);border-radius:24px;padding:32px;margin:24px 0}
-canvas.map{width:100%;max-width:340px;height:340px;border-radius:50%;background:radial-gradient(ellipse at center,#1a1a3a,#0a0a1a 70%);margin:20px auto;display:block;box-shadow:0 0 80px rgba(138,100,255,.3)}
-.letter-text{font-family:'Dancing Script',cursive;font-size:22px;line-height:1.6;color:#f0e6ff;text-align:left;white-space:pre-line}
-.btn{background:white;color:#0a0a1a;border:none;padding:14px 32px;border-radius:100px;font-weight:600;cursor:pointer;margin-top:20px}
+canvas.map{width:100%;max-width:340px;height:340px;border-radius:50%;background:radial-gradient(ellipse at center,#1a1a3a,#0a0a1a 70%);margin:20px auto;display:block}
+.letter-text{font-family:'Dancing Script',cursive;font-size:24px;line-height:1.7;color:#f0e6ff;text-align:left;min-height:200px;white-space:pre-line}
+.typed-cursor{animation:blink 1s infinite}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+.btn{background:white;color:#0a0a1a;border:none;padding:14px 32px;border-radius:100px;font-weight:700;cursor:pointer;margin-top:18px}
 .balloon{position:fixed;bottom:-150px;z-index:2;animation:floatUp linear forwards;pointer-events:none}
-.balloon-string{width:1px;height:50px;background:rgba(255,255,255,.4);margin:0 auto}
-@keyframes floatUp{0%{transform:translateY(0) rotate(0deg)}100%{transform:translateY(-120vh) rotate(-3deg);opacity:0}}
+@keyframes floatUp{to{transform:translateY(-120vh);opacity:0}}
+.cake{width:200px;height:90px;background:linear-gradient(#ffbe0b,#ff8fab);border-radius:12px 12px 20px 20px;margin:0 auto;position:relative}
+.cake::before{content:'';position:absolute;top:-20px;left:10px;right:10px;height:30px;background:#fff;border-radius:20px}
+.candles{display:flex;justify-content:center;gap:18px;position:absolute;top:-50px;left:0;right:0}
+.candle{width:12px;height:36px;background:linear-gradient(#8a64ff,#3a86ff);border-radius:6px;position:relative}
+.flame{position:absolute;top:-16px;left:50%;transform:translateX(-50%);width:14px;height:20px;background:radial-gradient(#fff,#ffbe0b 40%,#ff6b00);border-radius:50%;animation:flicker .2s infinite alternate;cursor:pointer}
+@keyframes flicker{from{transform:translateX(-50%) scaleY(1)}to{transform:translateX(-50%) scaleY(1.15)}}
+.flame.off{opacity:0;transform:translateX(-50%) scale(0);transition:.6s}
 </style>
 </head>
 <body id="body">
 <div id="balloon-container" style="position:fixed;inset:0;pointer-events:none;z-index:1"></div>
+<canvas id="confettiCanvas" style="position:fixed;inset:0;pointer-events:none;z-index:50"></canvas>
 
 <div class="scene" id="scene">
   <div class="hint">Toca para abrir ✨</div>
   <div class="envelope" id="envelope" onclick="openLetter()">
     <div class="env-back"></div>
-    <div class="letter"><div class="letter-inner">💌<p style="margin-top:12px;font-weight:600">PARA VOS</p></div></div>
+    <div class="letter"><div class="letter-inner">💌<p>PARA VOS</p></div></div>
     <div class="env-flap"></div>
   </div>
 </div>
 
 <div class="content" id="content">
   <canvas id="starsBg" class="stars"></canvas>
-  <div class="c">
+  <div class="center">
     <h1 class="title">Feliz cumpleaños</h1>
     <div class="card">
       <canvas id="map" class="map" width="700" height="700"></canvas>
-      <p style="font-size:13px;opacity:.6">Así se veían las estrellas el día que naciste</p>
     </div>
     <div class="card">
-      <p class="letter-text">Acá va tu mensaje...
-
-Ese día las estrellas se alinearon de una forma que nunca más se repitió.
-
-Gracias por existir ❤️
-
-🎈🎈🎈</p>
+      <p class="letter-text" id="typed"></p>
     </div>
-    <button class="btn" onclick="burstBalloons()">MÁS GLOBOS 🎈</button>
+    <div class="card">
+      <h3 style="font-family:'Dancing Script',cursive;font-size:28px;margin-bottom:14px">Pedí un deseo 🎂</h3>
+      <div class="candles" id="candles">
+        <div class="candle"><div class="flame"></div></div>
+        <div class="candle"><div class="flame"></div></div>
+        <div class="candle"><div class="flame"></div></div>
+      </div>
+      <div class="cake" style="margin-top:50px"></div>
+      <p style="font-size:13px;opacity:.7;margin-top:16px" id="blowHint">👉 Tocá las velitas o soplá al micro</p>
+      <button class="btn" id="wishBtn" style="display:none" onclick="celebrate()">¡Que se cumpla! ✨</button>
+    </div>
+    <button class="btn" onclick="moreBalloons()">MÁS GLOBOS 🎈</button>
   </div>
 </div>
 
 <script>
 const colors=['#ff8fab','#8a64ff','#ffbe0b','#06d6a0','#ff006e','#3a86ff'];
-function createBalloon(randomStart=false){
-  const c=document.getElementById('balloon-container');
-  const b=document.createElement('div'); b.className='balloon';
-  const color=colors[Math.floor(Math.random()*colors.length)];
-  const size=40+Math.random()*40;
-  b.style.left=Math.random()*100+'vw';
-  b.style.animationDuration=(8+Math.random()*8)+'s';
-  b.style.animationDelay=(randomStart?Math.random()*5:0)+'s';
-  b.innerHTML=`<div style="width:${size}px;height:${size*1.25}px;background:${color};border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;box-shadow:inset -8px -8px 0 rgba(0,0,0,.15)"></div><div class="balloon-string"></div>`;
-  c.appendChild(b);
-  setTimeout(()=>b.remove(),13000);
-}
-function startBalloons(){ for(let i=0;i<25;i++) createBalloon(true); setInterval(()=>createBalloon(false),600); }
-function burstBalloons(){ for(let i=0;i<30;i++) setTimeout(()=>createBalloon(false), i*60); }
-function openLetter(){
-  document.getElementById('envelope').classList.add('open');
-  setTimeout(()=>{
-    document.getElementById('scene').style.display='none';
-    document.getElementById('content').classList.add('show');
-    document.getElementById('body').style.background='#0e0e26';
-    document.getElementById('body').style.overflow='auto';
-    drawStarsBg(); drawMap(); startBalloons();
-  },1400);
-}
-function drawStarsBg(){ const c=document.getElementById('starsBg'); const x=c.getContext('2d'); c.width=innerWidth; c.height=innerHeight; for(let i=0;i<200;i++){x.fillStyle=`rgba(255,255,255,${Math.random()*.8})`;x.beginPath();x.arc(Math.random()*c.width,Math.random()*c.height,Math.random()*1.5,0,Math.PI*2);x.fill();} }
-function drawMap(){ const canvas=document.getElementById('map'); const ctx=canvas.getContext('2d'); const cx=350,cy=350; for(let i=0;i<400;i++){const a=Math.random()*Math.PI*2;const r=Math.random()*300;ctx.fillStyle=`rgba(255,255,255,${0.3+Math.random()*0.7})`;ctx.beginPath();ctx.arc(cx+Math.cos(a)*r,cy+Math.sin(a)*r,Math.random()*1.8,0,Math.PI*2);ctx.fill();} ctx.fillStyle='rgba(255,245,200,0.9)';ctx.beginPath();ctx.arc(cx+180,cy-170,22,0,Math.PI*2);ctx.fill(); }
-// globos ya en la intro
-for(let i=0;i<12;i++) setTimeout(()=>createBalloon(true), i*300);
+function createBalloon(r=false){const c=document.getElementById('balloon-container');const b=document.createElement('div');b.className='balloon';const col=colors[Math.floor(Math.random()*colors.length)];const s=36+Math.random()*42;b.style.left=Math.random()*100+'vw';b.style.animationDuration=(8+Math.random()*8)+'s';b.style.animationDelay=(r?Math.random()*5:0)+'s';b.innerHTML=`<div style="width:${s}px;height:${s*1.25}px;background:${col};border-radius:50% 50% 50% 50% / 60% 60% 40% 40%"></div><div style="width:1px;height:50px;background:rgba(255,255,255,.4);margin:0 auto"></div>`;c.appendChild(b);setTimeout(()=>b.remove(),13000);}
+function startBalloons(){for(let i=0;i<28;i++)createBalloon(true);setInterval(()=>createBalloon(false),550);}
+function moreBalloons(){for(let i=0;i<35;i++)setTimeout(()=>createBalloon(false),i*60);burstConfetti(120);}
+function burstConfetti(amount=180){const canvas=document.getElementById('confettiCanvas');const ctx=canvas.getContext('2d');canvas.width=innerWidth;canvas.height=innerHeight;const pieces=[];for(let i=0;i<amount;i++){pieces.push({x:innerWidth/2+(Math.random()-0.5)*200,y:innerHeight/2,vx:(Math.random()-0.5)*14,vy:-Math.random()*14-2,rot:Math.random()*360,vr:(Math.random()-0.5)*12,size:6+Math.random()*8,color:colors[Math.floor(Math.random()*colors.length)]});}let t=0;function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);pieces.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.3;p.rot+=p.vr;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);ctx.fillStyle=p.color;ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.6);ctx.restore();});t++;if(t<180)requestAnimationFrame(draw);else ctx.clearRect(0,0,canvas.width,canvas.height);}draw();}
+function openLetter(){document.getElementById('envelope').classList.add('open');burstConfetti(200);setTimeout(()=>{document.getElementById('scene').style.display='none';document.getElementById('content').classList.add('show');document.getElementById('body').style.overflow='auto';document.getElementById('body').classList.add('dawn');drawStarsBg();drawMap();startBalloons();startTyping();initCake();setTimeout(()=>burstConfetti(150),800);},1300);}
+function drawStarsBg(){const c=document.getElementById('starsBg');const x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;for(let i=0;i<220;i++){x.fillStyle=`rgba(255,255,255,${Math.random()*.8})`;x.beginPath();x.arc(Math.random()*c.width,Math.random()*c.height,Math.random()*1.6,0,Math.PI*2);x.fill();}}
+function drawMap(){const canvas=document.getElementById('map');const ctx=canvas.getContext('2d');const cx=350,cy=350;ctx.clearRect(0,0,700,700);for(let i=0;i<420;i++){const a=Math.random()*Math.PI*2;const r=Math.random()*300;ctx.fillStyle=`rgba(255,255,255,${0.3+Math.random()*0.7})`;ctx.beginPath();ctx.arc(cx+Math.cos(a)*r,cy+Math.sin(a)*r,Math.random()*1.9,0,Math.PI*2);ctx.fill();}ctx.fillStyle='rgba(255,245,200,0.9)';ctx.beginPath();ctx.arc(cx+180,cy-170,22,0,Math.PI*2);ctx.fill();}
+const fullText=`Hola amor ❤️\n\nEse día las estrellas se alinearon de una forma que nunca más se repitió.\n\nY desde entonces, cada año que pasa, el cielo se acuerda de vos.\n\nGracias por existir,\npor reírte así,\npor iluminar todo como lo hacés.\n\nHoy el día amanece por vos.\nSoplá las velitas y pedí bien fuerte,\nque yo me encargo de que se cumpla.\n\nFeliz cumpleaños 🎂✨`;
+function startTyping(){const el=document.getElementById('typed');let i=0;function type(){if(i<=fullText.length){el.innerHTML=fullText.slice(0,i)+'<span class="typed-cursor">|</span>';i++;setTimeout(type,32+Math.random()*40);}else{el.innerHTML=fullText;}}type();}
+function initCake(){const flames=document.querySelectorAll('.flame');let blown=0;function blowOne(fl){if(fl.classList.contains('off'))return;fl.classList.add('off');blown++;if(blown>=flames.length){document.getElementById('blowHint').textContent='¡Se apagaron! Pedí tu deseo ✨';document.getElementById('wishBtn').style.display='inline-block';burstConfetti(200);moreBalloons();}}flames.forEach(f=>f.addEventListener('click',()=>blowOne(f)));if(navigator.mediaDevices){navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{const audioCtx=new (window.AudioContext||window.webkitAudioContext)();const source=audioCtx.createMediaStreamSource(stream);const analyser=audioCtx.createAnalyser();analyser.fftSize=256;source.connect(analyser);const data=new Uint8Array(analyser.frequencyBinCount);function checkBlow(){analyser.getByteFrequencyData(data);const avg=data.reduce((a,b)=>a+b)/data.length;if(avg>45){flames.forEach(f=>{if(!f.classList.contains('off')&&Math.random()>0.5)blowOne(f);});}if(blown<flames.length)requestAnimationFrame(checkBlow);}checkBlow();}).catch(()=>{});}}
+function celebrate(){burstConfetti(300);moreBalloons();document.getElementById('wishBtn').textContent='¡Deseo concedido! 💫';}
+for(let i=0;i<12;i++)setTimeout(()=>createBalloon(true),i*280);
 </script>
 </body>
 </html>
