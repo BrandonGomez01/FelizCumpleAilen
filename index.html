@@ -26,13 +26,12 @@ body.dawn{background:linear-gradient(180deg,#ff7e5f 0%,#feb47b 20%,#1a1a3a 70%,#
 .center{position:relative;z-index:5;max-width:600px;margin:0 auto;padding:40px 24px;text-align:center}
 .title{font-family:'Dancing Script',cursive;font-size:52px;margin:20px 0 8px}
 .card{background:rgba(255,255,255,.08);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.15);border-radius:24px;padding:32px;margin:24px 0;overflow:hidden}
-/* ESTA ES LA TARJETA DEL CORAZON CON FONDO DISTINTO */
 .card.heart-card{background:#fffef9;border:1px solid #ffe0e8;box-shadow:0 20px 60px rgba(255,105,140,.2), inset 0 0 80px rgba(255,230,240,.8);}
 .heart-wrap{width:100%;max-width:380px;height:380px;margin:10px auto;position:relative;background:radial-gradient(ellipse at center,#fff 0%, #fff5f7 55%, #ffe4ea 100%);border-radius:24px;box-shadow:inset 0 0 40px rgba(255,182,193,.3)}
 #heartCanvas{position:absolute;inset:0;width:100%;height:100%;}
-.heart-word{position:absolute;font-family:'Dancing Script',cursive;color:#ff6b8a;opacity:0;transform:translate(-50%,-50%) scale(0);white-space:nowrap;font-weight:600;text-shadow:none;transition:all .5s cubic-bezier(.34,1.56,.64,1);font-size:14px;letter-spacing:0.3px}
+.heart-word{position:absolute;font-family:'Dancing Script',cursive;font-size:13px;line-height:1;opacity:0;transform:translate(-50%,-50%) scale(0);white-space:nowrap;font-weight:700;transition:all .5s cubic-bezier(.34,1.56,.64,1);pointer-events:none;background:rgba(255,255,255,0.85);padding:2px 6px;border-radius:8px;box-shadow:0 2px 6px rgba(255,105,140,0.15);}
 .heart-word.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
-.heart-name{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%) scale(0);font-family:'Dancing Script',cursive;font-size:56px;font-weight:700;color:#ff2e6b;opacity:0;text-shadow:0 2px 0 #fff, 0 0 20px rgba(255,46,107,.4);transition:all .9s cubic-bezier(.34,1.56,.64,1);z-index:10;white-space:nowrap}
+.heart-name{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(0);font-family:'Dancing Script',cursive;font-size:56px;font-weight:700;color:#ff2e6b;opacity:0;text-shadow:0 2px 0 #fff, 0 0 20px rgba(255,46,107,.4);transition:all .9s cubic-bezier(.34,1.56,.64,1);z-index:10;white-space:nowrap}
 .heart-name.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
 .letter-text{font-family:'Dancing Script',cursive;font-size:24px;line-height:1.7;color:#f0e6ff;text-align:left;min-height:200px;white-space:pre-line}
 .btn{background:white;color:#0a0a1a;border:none;padding:14px 32px;border-radius:100px;font-weight:700;cursor:pointer;margin-top:18px}
@@ -104,35 +103,47 @@ function moreBalloons(){for(let i=0;i<35;i++)setTimeout(()=>createBalloon(false)
 function burstConfetti(amount=180){const canvas=document.getElementById('confettiCanvas');const ctx=canvas.getContext('2d');canvas.width=innerWidth;canvas.height=innerHeight;const pieces=[];for(let i=0;i<amount;i++){pieces.push({x:innerWidth/2+(Math.random()-0.5)*200,y:innerHeight/2,vx:(Math.random()-0.5)*14,vy:-Math.random()*14-2,rot:Math.random()*360,vr:(Math.random()-0.5)*12,size:6+Math.random()*8,color:colors[Math.floor(Math.random()*colors.length)]});}let t=0;function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);pieces.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.3;p.rot+=p.vr;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);ctx.fillStyle=p.color;ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.6);ctx.restore();});t++;if(t<180)requestAnimationFrame(draw);else ctx.clearRect(0,0,canvas.width,canvas.height);}draw();}
 function openLetter(){document.getElementById('envelope').classList.add('open');burstConfetti(200);setTimeout(()=>{document.getElementById('scene').style.display='none';document.getElementById('content').classList.add('show');document.getElementById('body').style.overflow='auto';document.getElementById('body').classList.add('dawn');drawStarsBg();buildHeart();startBalloons();startTyping();initCake();setTimeout(()=>burstConfetti(150),800);},1300);}
 function drawStarsBg(){const c=document.getElementById('starsBg');const x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;for(let i=0;i<220;i++){x.fillStyle=`rgba(255,255,255,${Math.random()*.8})`;x.beginPath();x.arc(Math.random()*c.width,Math.random()*c.height,Math.random()*1.6,0,Math.PI*2);x.fill();}}
-// SOLO 12 FRASES, BIEN SEPARADAS EN CIRCULO CORAZON
+
 const wishes=["Feliz Cumpleaños","Happy Birthday","Joyeux Anniversaire","Buon Compleanno","Feliz Aniversário","Alles Gute","Parabéns","お誕生日おめでとう","생일 축하해","Doğum Günün Kutlu","С Днем Рождения","Grattis"];
 function heartPoint(t, scale){const x=16*Math.pow(Math.sin(t),3);const y=-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));return{x:x*scale,y:y*scale};}
+
 function buildHeart(){
   const wrap=document.getElementById('heartWrap');
   const canvas=document.getElementById('heartCanvas');
   const ctx=canvas.getContext('2d');
-  const cx=190, cy=210, scale=9.8;
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  // corazon muy sutil de fondo
-  ctx.strokeStyle='rgba(255,107,138,0.18)'; ctx.lineWidth=2; ctx.beginPath();
-  for(let t=0;t<Math.PI*2;t+=0.02){const p=heartPoint(t,scale); if(t===0) ctx.moveTo(cx+p.x,cy+p.y); else ctx.lineTo(cx+p.x,cy+p.y);} ctx.closePath(); ctx.stroke();
   
-  // 12 posiciones exactas en el borde, separadas 30 grados cada una
-  for(let i=0;i<wishes.length;i++){
-    const angle=(i/wishes.length)*Math.PI*2 - Math.PI/2; // -90° para empezar arriba
+  wrap.querySelectorAll('.heart-word').forEach(el=>el.remove());
+
+  const cx=190, cy=195, scale=9.2;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  
+  ctx.strokeStyle='rgba(255,107,138,0.2)'; ctx.lineWidth=2; ctx.beginPath();
+  for(let t=0;t<Math.PI*2;t+=0.02){const p=heartPoint(t,scale); if(t===0) ctx.moveTo(cx+p.x,cy+p.y); else ctx.lineTo(cx+p.x,cy+p.y);} ctx.closePath(); ctx.stroke();
+
+  const total=wishes.length;
+  for(let i=0;i<total;i++){
+    const angle=(i/total)*Math.PI*2 - Math.PI/2;
     const p=heartPoint(angle,scale);
+
     const el=document.createElement('div'); 
     el.className='heart-word';
     el.textContent=wishes[i];
+    
     el.style.left=(cx+p.x)+'px'; 
     el.style.top=(cy+p.y)+'px';
-    // alternar color para que se distinga
-    el.style.color= i%2===0 ? '#ff2e6b' : '#8a64ff';
+    el.style.color=(i%2===0)?'#ff2e6b':'#7b2cbf';
+    
     wrap.appendChild(el);
-    setTimeout(()=>el.classList.add('show'), i*140);
+    setTimeout(()=>el.classList.add('show'), i*130);
   }
-  setTimeout(()=>{document.getElementById('heartName').classList.add('show'); wrap.classList.add('beating'); burstConfetti(100);}, wishes.length*140+400);
+
+  setTimeout(()=>{
+    document.getElementById('heartName').classList.add('show'); 
+    wrap.classList.add('beating'); 
+    burstConfetti(100);
+  }, total*130+300);
 }
+
 const fullText=`Hola Ailen ❤️\n\nSi pudiera decirte feliz cumple en todos los idiomas del mundo, lo haría.\n\nY aun así no alcanzaría para decirte lo mucho que me importas.\n\nGracias por existir,\npor reírte así,\npor iluminar todo como lo hacés.\n\nHoy todo el mundo celebra por vos.\nPedí un deseo bien fuerte,\nque yo me encargo de que se cumpla.\n\nFeliz cumpleaños, Ailen 🎂✨`;
 function startTyping(){const el=document.getElementById('typed');let i=0;function type(){if(i<=fullText.length){el.innerHTML=fullText.slice(0,i)+'<span class="typed-cursor">|</span>';i++;setTimeout(type,30+Math.random()*30);}else{el.innerHTML=fullText;}}type();}
 function initCake(){
